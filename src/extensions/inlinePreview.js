@@ -36,7 +36,6 @@ export const inlinePreview = (/** @type {TextManager} */ text, options, editorVi
   });
 
   const tokenElement = ["InlineCode", "Emphasis", "StrongEmphasis", "FencedCode", "Image", "Blockquote"];
-  const tokenHidden = ["HardBreak", "EmphasisMark"];
   const decorationHidden = Decoration.replace({});
   const decorationMonospace = Decoration.mark({ class: "cm-inline-mono" });
   const nodeInSuggestion = (state, node) => state.field(criticMarkup).suggestionRanges.some((r) => node.from >= r.from && node.to <= r.to);
@@ -205,8 +204,12 @@ export const inlinePreview = (/** @type {TextManager} */ text, options, editorVi
                 }
               }
 
-              if (tokenHidden.includes(node.name) && !nodeInMonospace(view.state, node)) {
+              if (node.name == "EmphasisMark" && !nodeInMonospace(view.state, node)) {
                 widgets.push(decorationHidden.range(node.from, node.to));
+              }
+
+              if (node.name == "HardBreak" && !nodeInMonospace(view.state, node)) {
+                widgets.push(decorationHidden.range(node.from, node.from + 1));
               }
             },
           });
