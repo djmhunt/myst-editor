@@ -76,7 +76,7 @@ export const yamlSchema = (schema, editorView, linter) => {
     tooltipSources: {
       yaml: {
         async doHover(view, pos) {
-          if (!lspClient.ready || !lspClient.capabilities?.hoverProvider || pos < 0) return null;
+          if (!lspClient.ready || !lspClient.capabilities?.hoverProvider || pos < 0 || pos > view.state.doc.length) return null;
 
           const id = view.state.field(subEditorId)[0];
           const result = await lspClient.textDocumentHover({
