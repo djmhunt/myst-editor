@@ -126,8 +126,9 @@ export const inlinePreview = (/** @type {TextManager} */ text, options, editorVi
     return decorations;
   }
 
-  const renderMdInline = () =>
-    StateField.define({
+  const renderMdInline = () => {
+    let initialUpdate = true;
+    return StateField.define({
       create(state) {
         return RangeSet.of(replaceMd(state), true);
       },
@@ -137,7 +138,8 @@ export const inlinePreview = (/** @type {TextManager} */ text, options, editorVi
         const selectionChanged =
           transaction.startState.doc.lineAt(transaction.startState.selection.main.head).number !==
           transaction.state.doc.lineAt(transaction.state.selection.main.head).number;
-        if (!focusChanged && !transaction.docChanged && !selectionChanged) return curr;
+        if (!initialUpdate && !focusChanged && !transaction.docChanged && !selectionChanged) return curr;
+        if (initialUpdate) initialUpdate = false;
         return RangeSet.of(replaceMd(transaction.state), true);
       },
 
@@ -145,6 +147,7 @@ export const inlinePreview = (/** @type {TextManager} */ text, options, editorVi
         return EditorView.decorations.from(field);
       },
     });
+  };
 
   return ViewPlugin.fromClass(
     class {
