@@ -40,11 +40,11 @@ const Diff = () => {
       // Regarding the a/b distinction: the MergeView library expects that the old state is in `a` and that the new state is in `b`.
       // We want to show the new state on the left side so the `b` editor is on the left and `a` editor is on the right.
       a: {
-        doc: options.initialText.peek(),
+        doc: options.initialText.peek()?.replace(/\r/g, ""),
         extensions: new ExtensionBuilder().useReadonly().useLanguage(options.language.value, options.transforms.value).create(),
       },
       b: {
-        doc: text.text.peek(),
+        doc: text.text.peek()?.replace(/\r/g, ""),
         extensions: ExtensionBuilder.basicSetup()
           .useLanguage("markdown", options.transforms.value)
           .if(options.collaboration.value.enabled, (b) => {
