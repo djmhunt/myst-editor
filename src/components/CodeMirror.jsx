@@ -336,7 +336,7 @@ const CodeMirror = () => {
       doc: options.collaboration.value.enabled ? collab.value.ytext.toString() : text.text.peek(),
       extensions: ExtensionBuilder.basicSetup()
         .useLanguage(options.language.value, options.transforms.value)
-        .if(options.mode.value !== "Inline", (b) => b.useLineNumbers())
+        .useLineNumbers()
         .useCompartment(userExtensionsCompartment, [])
         .useSpellcheck(options.spellcheckOpts.value)
         .if(options.collaboration.value.enabled, (b) => {
