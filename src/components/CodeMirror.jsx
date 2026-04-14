@@ -382,6 +382,13 @@ const CodeMirror = () => {
 
     collab.value?.ycomments?.registerCodeMirror(view);
 
+    /* We call updateMainCodeMirror to recreate spacing for comments. Calling this function immediately inside useSignalEffect
+     * would cause an infinite loop (probably because the effect that it triggers interacts with some dependencies of this hook)
+     * so instead we call it outside the current hook using setTimeout. */
+    setTimeout(() => {
+      collab.value?.ycomments?.updateMainCodeMirror();
+    }, 0);
+
     return () => {
       view.destroy();
     };
